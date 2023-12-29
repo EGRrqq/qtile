@@ -28,6 +28,10 @@ from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
+import os
+
+# Define keyboard layouts
+os.system("setxkbmap -layout us,ru -option grp:alt_shift_toggle")
 
 mod = "mod4"
 terminal = guess_terminal()
@@ -90,6 +94,15 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "d", lazy.spawn("rofi -modi drun,run -show drun"), desc="Spawn a command using a prompt widget"),
+    # audio manipulations
+    Key([], "XF86AudioRaiseVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%"), desc="Increase audio volume"),
+    Key([], "XF86AudioLowerVolume", lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%"), desc="Decrease audio volume"),
+    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle"), desc="Toggle audio mute"),
+    Key([], "XF86AudioMicMute", lazy.spawn("pactl set-source-mute @DEFAULT_SOURCE@ toggle"), desc="Toggle microphone mute"),
+    # Clipboard screenshots
+    Key([], "Print", lazy.spawn(["sh", "-c", "maim -u | xclip -selection clipboard -t image/png"]), desc="clipboard fullscreen screenshot"),
+    Key(["control"], "Print", lazy.spawn(["sh", "-c", "maim -u -s | xclip -selection clipboard -t image/png"]), desc="clipboard selection screenshot"),
+    Key([mod, "control"], "Print", lazy.spawn(["sh", "-c", "maim -u -i $(xdotool getactivewindow) | xclip -selection clipboard -t image/png"]), desc="clipboard active window screenshot"),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -149,6 +162,7 @@ screens = [
                 widget.GroupBox(),
                 widget.Prompt(),
                 widget.WindowName(),
+                widget.Memory(measure_mem='G'),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
@@ -159,7 +173,7 @@ screens = [
                 # widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
-                widget.Systray(),
+                # widget.Systray(),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
                 widget.QuickExit(),
             ],
