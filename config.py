@@ -103,6 +103,7 @@ keys = [
     Key([], "Print", lazy.spawn(["sh", "-c", "maim -u | xclip -selection clipboard -t image/png"]), desc="clipboard fullscreen screenshot"),
     Key(["control"], "Print", lazy.spawn(["sh", "-c", "maim -u -s | xclip -selection clipboard -t image/png"]), desc="clipboard selection screenshot"),
     Key([mod, "control"], "Print", lazy.spawn(["sh", "-c", "maim -u -i $(xdotool getactivewindow) | xclip -selection clipboard -t image/png"]), desc="clipboard active window screenshot"),
+    Key(["control", "shift"], "Print", lazy.spawn(["sh", "-c", "maim ~/Pictures/screenshots/$(date +%s).png"]), desc="save full screen screenshot"),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -176,7 +177,7 @@ screens = [
                 # widget.StatusNotifier(),
                 # widget.Systray(),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                widget.QuickExit(),
+                widget.QuickExit(default_text='[X]'),
             ],
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
