@@ -164,7 +164,17 @@ screens = [
                 widget.Prompt(),
                 widget.WindowName(),
                 widget.Wallpaper(),
-                widget.Memory(measure_mem='G'),
+                widget.Sep(),
+                widget.WidgetBox(widgets=[
+                        widget.DF(visible_on_warn=False),
+                        widget.Sep(),
+                        widget.CPU(),
+                        widget.Sep(),
+                        widget.Memory(measure_mem='G'),
+                    ],
+                    start_opened=True
+                ),
+                widget.Sep(),
                 widget.Chord(
                     chords_colors={
                         "launch": ("#ff0000", "#ffffff"),
