@@ -29,6 +29,7 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 import os
+from tabbed import Tabbed
 
 # Define keyboard layouts
 os.system("setxkbmap -layout us,ru -option grp:alt_shift_toggle")
@@ -82,7 +83,8 @@ keys = [
     ),
     Key([mod], "Return", lazy.spawn(terminal), desc="Launch terminal"),
     # Toggle between different layouts as defined below
-    Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
+    Key([mod], "Tab", lazy.next_layout(), desc="Toggle next layout"),
+    Key([mod, "shift"], "Tab", lazy.prev_layout(), desc="Toggle prev layout"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
     Key(
         [mod],
@@ -143,7 +145,9 @@ layouts = [
     layout.MonadWide(),
     # layout.RatioTile(),
     layout.Tile(),
-    layout.TreeTab(),
+    # layout.Stack(),
+    # layout.TreeTab(place_right=True),
+    Tabbed(bar_height=20),
     # layout.VerticalTile(),
     # layout.Zoomy(),
 ]
